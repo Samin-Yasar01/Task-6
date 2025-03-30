@@ -1,0 +1,181 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\views\\home\\presentation.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:views\\home\\presentation.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\hubs\\presentationhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:hubs\\presentationhub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\collaborativepresentation.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:collaborativepresentation.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|d:\\itranstion\\tasks\\last\\collaborativepresentation\\models\\presentation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{25BD289B-FA20-4C53-B5AF-022EF8F4B8AA}|CollaborativePresentation.csproj|solutionrelative:models\\presentation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-29T22:43:35.924Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-29T22:38:24.302Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Presentation.cshtml",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Views\\Home\\Presentation.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Presentation.cshtml",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Views\\Home\\Presentation.cshtml",
+              "RelativeToolTip": "Views\\Home\\Presentation.cshtml",
+              "ViewState": "AgIAACUCAAAAAAAAAAAUwEUCAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-29T22:37:54.407Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAAEIAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-29T22:37:35.973Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAUwFkAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T22:37:23.422Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PresentationHub.cs",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Hubs\\PresentationHub.cs",
+              "RelativeDocumentMoniker": "Hubs\\PresentationHub.cs",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Hubs\\PresentationHub.cs",
+              "RelativeToolTip": "Hubs\\PresentationHub.cs",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAywH4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T22:37:09.776Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T22:36:42.126Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T22:35:50.253Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CollaborativePresentation.csproj",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\CollaborativePresentation.csproj",
+              "RelativeDocumentMoniker": "CollaborativePresentation.csproj",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\CollaborativePresentation.csproj",
+              "RelativeToolTip": "CollaborativePresentation.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-29T22:36:28.564Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Presentation.cs",
+              "DocumentMoniker": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Models\\Presentation.cs",
+              "RelativeDocumentMoniker": "Models\\Presentation.cs",
+              "ToolTip": "D:\\Itranstion\\Tasks\\Last\\CollaborativePresentation\\Models\\Presentation.cs",
+              "RelativeToolTip": "Models\\Presentation.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAywEUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T22:36:12.65Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,582 @@
+﻿@model CollaborativePresentation.Models.Presentation
+@{
+    ViewData["Title"] = Model.Name;
+    var userName = ViewBag.UserName as string;
+    var isCreator = ViewBag.IsCreator as bool? ?? false;
+}
+
+<style>
+    .presentation-container {
+        height: calc(100vh - 56px);
+        margin-top: -1.5rem;
+    }
+
+    .slides-panel, .users-panel {
+        background-color: #f8f9fa;
+        height: 100%;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    .slide-area {
+        height: 100%;
+        background-color: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .slide-thumbnail {
+        cursor: pointer;
+        padding: 10px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+        .slide-thumbnail:hover {
+            background-color: #e9ecef;
+        }
+
+        .slide-thumbnail.active {
+            background-color: #dee2e6;
+        }
+
+    .text-element {
+        position: absolute;
+        min-width: 100px;
+        min-height: 50px;
+        border: 1px dashed #ccc;
+        padding: 5px;
+        background-color: rgba(255, 255, 255, 0.9);
+        cursor: move;
+    }
+
+    .presentation-mode {
+        background-color: #000;
+    }
+
+        .presentation-mode .text-element {
+            border: none;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+    .presentation-toolbar {
+        padding: 10px;
+        border-bottom: 1px solid #dee2e6;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .thumbnail-content {
+        height: 100px;
+        position: relative;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin-bottom: 5px;
+    }
+
+    .user-item {
+        padding: 8px 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+</style>
+
+<div class="container-fluid p-0 presentation-container">
+    <div class="row g-0 h-100">
+        <!-- Left Panel -->
+        <div class="col-md-2 slides-panel">
+            <div class="presentation-toolbar">
+                <button id="presentModeBtn" class="btn btn-success w-100">
+                    Start Presentation
+                </button>
+                <button id="addTextBtn" class="btn btn-primary w-100">
+                    Add Text Box
+                </button>
+                @if (isCreator)
+                {
+                    <form method="post" asp-action="AddSlide" class="w-100">
+                        <input type="hidden" name="presentationId" value="@Model.Id">
+                        <input type="hidden" name="userName" value="@userName">
+                        <button type="submit" class="btn btn-secondary w-100">Add Slide</button>
+                    </form>
+                }
+            </div>
+
+            <div class="slide-thumbnails">
+                @foreach (var slide in Model.Slides.OrderBy(s => s.Order))
+                {
+                    <div class="slide-thumbnail" data-slide-id="@slide.Id">
+                        <div class="thumbnail-content">
+                            @foreach (var element in slide.TextElements)
+                            {
+                                <div class="text-element-preview"
+                                     style="left: @(element.PositionX/5)px;
+                                            top: @(element.PositionY/5)px;
+                                            width: @(element.Width/5)px;
+                                            height: @(element.Height/5)px;">
+                                    @Html.Raw(Markdig.Markdown.ToHtml(element.Content))
+                                </div>
+                            }
+                        </div>
+                        <div class="text-center mt-1">Slide @(slide.Order + 1)</div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-8 slide-area">
+            <div id="slideContent" class="h-100 position-relative">
+                @{
+                    var firstSlide = Model.Slides.OrderBy(s => s.Order).FirstOrDefault();
+                    if (firstSlide != null)
+                    {
+                        foreach (var element in firstSlide.TextElements)
+                        {
+                            <div class="text-element" data-element-id="@element.Id"
+                                 style="left: @(element.PositionX)px;
+                                            top: @(element.PositionY)px;
+                                            width: @(element.Width)px;
+                                            height: @(element.Height)px;">
+                                <div class="element-content">@Html.Raw(Markdig.Markdown.ToHtml(element.Content))</div>
+                                <textarea class="element-edit form-control" style="display: none;">@element.Content</textarea>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="col-md-2 users-panel">
+            <div class="p-3 border-bottom">
+                <h5>Participants</h5>
+                <p class="text-muted small">Connected as @userName</p>
+            </div>
+            <div id="usersList" class="flex-grow-1 overflow-auto"></div>
+            <div class="p-3 border-top">
+                <button id="leavePresentationBtn" class="btn btn-danger w-100">Leave</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="userName" value="@userName">
+<input type="hidden" id="presentationId" value="@Model.Id">
+<input type="hidden" id="isCreator" value="@isCreator.ToString().ToLower()">
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        // Configuration
+        const userName = document.getElementById('userName').value;
+        const presentationId = document.getElementById('presentationId').value;
+        const isCreator = document.getElementById('isCreator').value === 'true';
+        let currentSlideId = '@Model.Slides.OrderBy(s => s.Order).FirstOrDefault()?.Id';
+        let isEditor = isCreator;
+        let isInPresentationMode = false;
+
+        // Initialize SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/presentationHub')
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        // Start connection
+        async function startConnection() {
+            try {
+                await connection.start();
+                console.log('SignalR connected');
+                await connection.invoke('JoinPresentation', presentationId, userName);
+                setupEventHandlers();
+            } catch (err) {
+                console.error('SignalR connection error:', err);
+                setTimeout(startConnection, 5000);
+            }
+        }
+
+        // SignalR Event Handlers
+        function setupEventHandlers() {
+            connection.on('UserJoined', (joinedUserName) => {
+                if (joinedUserName !== userName) {
+                    showToast(`${joinedUserName} joined the presentation`);
+                }
+            });
+
+            connection.on('UserLeft', (leftUserName) => {
+                if (leftUserName !== userName) {
+                    showToast(`${leftUserName} left the presentation`);
+                }
+            });
+
+            connection.on('EditorStatusChanged', (changedUserName, isNowEditor) => {
+                if (changedUserName === userName) {
+                    isEditor = isNowEditor;
+                    showToast(`You are now ${isNowEditor ? 'an editor' : 'a viewer'}`);
+                    setupTextElements();
+                }
+            });
+
+            connection.on('UpdateUserList', (users) => {
+                updateUsersList(users);
+            });
+
+            connection.on('TextElementAdded', (slideId, elementId, content, x, y) => {
+                if (slideId === currentSlideId) {
+                    addTextElement(elementId, content, x, y);
+                }
+            });
+
+            connection.on('TextElementUpdated', (elementId, content) => {
+                updateTextElementContent(elementId, content);
+            });
+
+            connection.on('TextElementMoved', (elementId, x, y) => {
+                moveTextElement(elementId, x, y);
+            });
+        }
+
+        // Presentation Mode Functions
+        function enterPresentationMode() {
+            const slidesPanel = document.querySelector('.slides-panel');
+            const usersPanel = document.querySelector('.users-panel');
+            const slideArea = document.querySelector('.slide-area');
+            const toolbar = document.querySelector('.presentation-toolbar');
+
+            slidesPanel.style.display = 'none';
+            usersPanel.style.display = 'none';
+            if (toolbar) toolbar.style.display = 'none';
+            slideArea.classList.add('presentation-mode');
+            slideArea.classList.remove('col-md-8');
+            slideArea.classList.add('col-12');
+
+            document.getElementById('presentModeBtn').textContent = 'Exit Presentation';
+
+            // Try fullscreen API
+            if (slideArea.requestFullscreen) {
+                slideArea.requestFullscreen().catch(err => {
+                    console.log('Fullscreen error:', err);
+                });
+            }
+
+            isInPresentationMode = true;
+            centerSlideContent();
+        }
+
+        function exitPresentationMode() {
+            const slidesPanel = document.querySelector('.slides-panel');
+            const usersPanel = document.querySelector('.users-panel');
+            const slideArea = document.querySelector('.slide-area');
+            const toolbar = document.querySelector('.presentation-toolbar');
+
+            slidesPanel.style.display = 'block';
+            usersPanel.style.display = 'block';
+            if (toolbar) toolbar.style.display = 'flex';
+            slideArea.classList.remove('presentation-mode');
+            slideArea.classList.remove('col-12');
+            slideArea.classList.add('col-md-8');
+
+            document.getElementById('presentModeBtn').textContent = 'Start Presentation';
+
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+
+            isInPresentationMode = false;
+        }
+
+        function centerSlideContent() {
+            if (!isInPresentationMode) return;
+
+            const slideContent = document.getElementById('slideContent');
+            const elements = slideContent.querySelectorAll('.text-element');
+            const slideArea = document.querySelector('.slide-area');
+            const areaRect = slideArea.getBoundingClientRect();
+
+            elements.forEach(element => {
+                const elementRect = element.getBoundingClientRect();
+                const centerX = (areaRect.width - elementRect.width) / 2;
+                const centerY = (areaRect.height - elementRect.height) / 2;
+
+                element.style.left = `${centerX}px`;
+                element.style.top = `${centerY}px`;
+
+                // Update position in database
+                const elementId = element.getAttribute('data-element-id');
+                connection.invoke('MoveTextElement', presentationId, elementId, centerX, centerY);
+            });
+        }
+
+        // UI Functions
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast show align-items-center text-white bg-primary border-0';
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            const toastBody = document.createElement('div');
+            toastBody.className = 'd-flex';
+
+            const toastContent = document.createElement('div');
+            toastContent.className = 'toast-body';
+            toastContent.textContent = message;
+
+            const closeBtn = document.createElement('button');
+            closeBtn.type = 'button';
+            closeBtn.className = 'btn-close btn-close-white me-2 m-auto';
+            closeBtn.setAttribute('data-bs-dismiss', 'toast');
+            closeBtn.setAttribute('aria-label', 'Close');
+
+            toastBody.appendChild(toastContent);
+            toastBody.appendChild(closeBtn);
+            toast.appendChild(toastBody);
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function updateUsersList(users) {
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '';
+
+            users.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item d-flex justify-content-between align-items-center p-2';
+
+                const userInfo = document.createElement('span');
+                userInfo.textContent = user.userName;
+                if (user.userName === userName) {
+                    userInfo.innerHTML += ' <span class="badge bg-primary">You</span>';
+                }
+                if (user.isEditor) {
+                    userInfo.innerHTML += ' <span class="badge bg-success">Editor</span>';
+                }
+
+                userItem.appendChild(userInfo);
+
+                if (isCreator && user.userName !== userName) {
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = 'btn btn-sm ' + (user.isEditor ? 'btn-warning' : 'btn-success');
+                    toggleBtn.textContent = user.isEditor ? 'Make Viewer' : 'Make Editor';
+                    toggleBtn.onclick = () => connection.invoke('ToggleEditor', presentationId, user.userName, !user.isEditor);
+                    userItem.appendChild(toggleBtn);
+                }
+
+                usersList.appendChild(userItem);
+            });
+        }
+
+        // Slide Management
+        document.querySelectorAll('.slide-thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                if (!isEditor) return;
+
+                const slideId = thumb.getAttribute('data-slide-id');
+                loadSlide(slideId);
+
+                document.querySelectorAll('.slide-thumbnail').forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+            });
+        });
+
+        function loadSlide(slideId) {
+            fetch(`/Home/GetSlide?id=${slideId}`)
+                .then(response => response.json())
+                .then(slide => {
+                    currentSlideId = slideId;
+                    const slideContent = document.getElementById('slideContent');
+                    slideContent.innerHTML = '';
+
+                    slide.textElements.forEach(element => {
+                        addTextElement(element.id, element.content, element.positionX, element.positionY, element.width, element.height);
+                    });
+
+                    if (isInPresentationMode) {
+                        centerSlideContent();
+                    }
+                });
+        }
+
+        // Text Element Management
+        function addTextElement(elementId, content, x, y, width = 200, height = 100) {
+            const slideContent = document.getElementById('slideContent');
+
+            const element = document.createElement('div');
+            element.className = 'text-element';
+            element.setAttribute('data-element-id', elementId);
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+            element.style.width = `${width}px`;
+            element.style.height = `${height}px`;
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'element-content';
+            contentDiv.innerHTML = marked.parse(content);
+
+            const textarea = document.createElement('textarea');
+            textarea.className = 'element-edit form-control';
+            textarea.style.display = 'none';
+            textarea.value = content;
+
+            element.appendChild(contentDiv);
+            element.appendChild(textarea);
+            slideContent.appendChild(element);
+
+            setupTextElement(element);
+        }
+
+        function updateTextElementContent(elementId, content) {
+            const element = document.querySelector(`.text-element[data-element-id="${elementId}"]`);
+            if (element) {
+                element.querySelector('.element-content').innerHTML = marked.parse(content);
+            }
+        }
+
+        function moveTextElement(elementId, x, y) {
+            const element = document.querySelector(`.text-element[data-element-id="${elementId}"]`);
+            if (element) {
+                element.style.left = `${x}px`;
+                element.style.top = `${y}px`;
+            }
+        }
+
+        function setupTextElements() {
+            document.querySelectorAll('.text-element').forEach(setupTextElement);
+        }
+
+        function setupTextElement(element) {
+            if (!isEditor) {
+                element.style.cursor = 'default';
+                element.style.border = 'none';
+                return;
+            }
+
+            const elementId = element.getAttribute('data-element-id');
+            const contentDiv = element.querySelector('.element-content');
+            const textarea = element.querySelector('.element-edit');
+
+            // Double click to edit
+            element.addEventListener('dblclick', () => {
+                contentDiv.style.display = 'none';
+                textarea.style.display = 'block';
+                textarea.focus();
+            });
+
+            textarea.addEventListener('blur', () => {
+                contentDiv.style.display = 'block';
+                textarea.style.display = 'none';
+                const newContent = textarea.value;
+                contentDiv.innerHTML = marked.parse(newContent);
+                connection.invoke('UpdateTextElement', presentationId, elementId, newContent);
+            });
+
+            textarea.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    textarea.blur();
+                }
+            });
+
+            // Make draggable with interact.js
+            interact(element).draggable({
+                inertia: true,
+                modifiers: [
+                    interact.modifiers.restrictRect({
+                        restriction: 'parent',
+                        endOnly: true
+                    })
+                ],
+                autoScroll: true,
+                listeners: {
+                    move: dragMoveListener,
+                    end: (event) => {
+                        const x = parseFloat(element.style.left);
+                        const y = parseFloat(element.style.top);
+                        connection.invoke('MoveTextElement', presentationId, elementId, x, y);
+                    }
+                }
+            });
+
+            function dragMoveListener(event) {
+                const target = event.target;
+                const x = (parseFloat(target.style.left) || 0) + event.dx;
+                const y = (parseFloat(target.style.top) || 0) + event.dy;
+
+                target.style.left = `${x}px`;
+                target.style.top = `${y}px`;
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('addTextBtn').addEventListener('click', () => {
+            if (!isEditor) return;
+
+            const x = isInPresentationMode ? (window.innerWidth - 200) / 2 : 50;
+            const y = isInPresentationMode ? (window.innerHeight - 100) / 2 : 50;
+            const content = "Double click to edit";
+
+            connection.invoke('AddTextElement', presentationId, currentSlideId, content, x, y)
+                .catch(err => console.error('Error adding text element:', err));
+        });
+
+        document.getElementById('presentModeBtn').addEventListener('click', () => {
+            if (isInPresentationMode) {
+                exitPresentationMode();
+            } else {
+                enterPresentationMode();
+            }
+        });
+
+        document.getElementById('leavePresentationBtn').addEventListener('click', () => {
+            if (isInPresentationMode) {
+                exitPresentationMode();
+            }
+            connection.invoke('LeavePresentation', presentationId, userName)
+                .then(() => window.location.href = '/');
+        });
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (!isInPresentationMode) return;
+
+            if (e.key === 'Escape') {
+                exitPresentationMode();
+            }
+            else if (e.key === 'ArrowRight') {
+                const currentThumb = document.querySelector('.slide-thumbnail.active');
+                const nextThumb = currentThumb?.nextElementSibling;
+                if (nextThumb) nextThumb.click();
+            }
+            else if (e.key === 'ArrowLeft') {
+                const currentThumb = document.querySelector('.slide-thumbnail.active');
+                const prevThumb = currentThumb?.previousElementSibling;
+                if (prevThumb) prevThumb.click();
+            }
+        });
+
+        // Fullscreen change handler
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement && isInPresentationMode) {
+                exitPresentationMode();
+            }
+        });
+
+        // Initialize
+        startConnection();
+        if (document.querySelector('.slide-thumbnail')) {
+            document.querySelector('.slide-thumbnail').classList.add('active');
+        }
+        setupTextElements();
+    </script>
+}
